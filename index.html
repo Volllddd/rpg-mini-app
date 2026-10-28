@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10120f">
+  <title>Хроники героя</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="app-shell" id="app">
+    <header class="topbar">
+      <div class="sigil">✦</div>
+      <div><div class="eyebrow">ЛИЧНАЯ ХРОНИКА</div><div class="brand">Путь героя</div></div>
+      <button class="icon-button" id="refresh" aria-label="Обновить">⟳</button>
+    </header>
+
+    <main id="screen" aria-live="polite">
+      <section class="hero-card">
+        <div class="hero-art">
+          <img src="assets/hero-level-1.png" alt="Портрет героя первого уровня">
+          <div class="art-vignette"></div>
+          <div class="level-medallion"><small>УР.</small><b id="hero-level">1</b></div>
+          <div class="hero-caption"><span id="hero-rank">Путник</span><h1 id="hero-title">Твой путь начинается</h1><span class="hero-flavour">Каждый настоящий шаг оставляет след.</span></div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span>✧ Опыт</span><b id="hero-xp">0 / 100</b></div>
+          <div class="stat"><span>◈ Золото</span><b id="hero-gold">0</b></div>
+          <div class="xp-track"><i id="xp-fill"></i></div>
+        </div>
+      </section>
+
+      <section class="daily-line"><span class="sun-icon">☼</span><div><b id="today-date">Сегодня</b><small id="today-summary">Собери план небольшими шагами</small></div><span class="weather">✦</span></section>
+      <section class="section-head"><div><span class="eyebrow">ТВОЙ МАРШРУТ</span><h2 id="section-title">День героя</h2></div><button class="text-button" id="quick-add">＋ Квест</button></section>
+      <section id="content" class="content"></section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Разделы">
+      <button class="nav-item active" data-page="today"><span>⌂</span><small>Сегодня</small></button>
+      <button class="nav-item" data-page="quests"><span>⚔</span><small>Квесты</small></button>
+      <button class="nav-item" data-page="map"><span>⌖</span><small>Кампания</small></button>
+      <button class="nav-item" data-page="inventory"><span>♜</span><small>Снаряжение</small></button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <dialog id="quest-dialog" class="modal">
+    <form method="dialog" id="quest-form">
+      <div class="modal-top"><div><span class="eyebrow">НОВОЕ ПРИКЛЮЧЕНИЕ</span><h2>Добавить квест</h2></div><button class="icon-button close" value="cancel" aria-label="Закрыть">×</button></div>
+      <label>Название<input name="title" required maxlength="120" placeholder="Например: прочитать главу"></label>
+      <div class="form-row"><label>Сложность<select name="difficulty"><option value="easy">Лёгкий · 10 XP</option><option value="normal" selected>Средний · 25 XP</option><option value="hard">Сложный · 50 XP</option><option value="epic">Эпический · 80 XP</option></select></label><label>Срок<input name="due" type="date"></label></div>
+      <label>Направление<select name="category"><option value="discipline">Дисциплина</option><option value="knowledge">Знания</option><option value="health">Здоровье</option><option value="craft">Мастерство</option></select></label>
+      <p class="form-note">Награда начисляется один раз после выполнения. Перерыв не отнимает уже полученный опыт.</p>
+      <button class="primary-button" type="submit">Внести в хронику</button>
+    </form>
+  </dialog>
+  <dialog id="habit-dialog" class="modal">
+    <form method="dialog" id="habit-form">
+      <div class="modal-top"><div><span class="eyebrow">ПОСТОЯННЫЙ ГРАФИК</span><h2>Добавить привычку</h2></div><button class="icon-button close" value="cancel" aria-label="Закрыть">×</button></div>
+      <label>Название<input name="title" required maxlength="100" placeholder="Например: зарядка"></label>
+      <label>Направление<select name="category"><option value="discipline">Дисциплина</option><option value="knowledge">Знания</option><option value="health">Здоровье</option><option value="craft">Мастерство</option></select></label>
+      <p class="form-note">Привычка будет храниться отдельно от разовых квестов.</p>
+      <button class="primary-button" type="submit">Добавить в график</button>
+    </form>
+  </dialog>
+  <dialog id="goal-dialog" class="modal">
+    <form method="dialog" id="goal-form">
+      <div class="modal-top"><div><span class="eyebrow">ДОЛГАЯ КАМПАНИЯ</span><h2>Новая цель</h2></div><button class="icon-button close" value="cancel" aria-label="Закрыть">×</button></div>
+      <label>Название кампании<input name="title" required maxlength="100" placeholder="К чему ты идёшь?"></label>
+      <p class="form-note">Цель делится на четыре этапа. Каждый шаг — твой реальный вклад.</p>
+      <button class="primary-button" type="submit">Начать кампанию</button>
+    </form>
+  </dialog>
+  <dialog id="reward-dialog" class="modal">
+    <form method="dialog" id="reward-form">
+      <div class="modal-top"><div><span class="eyebrow">ЛИЧНОЕ ПООЩРЕНИЕ</span><h2>Добавить награду</h2></div><button class="icon-button close" value="cancel" aria-label="Закрыть">×</button></div>
+      <label>Награда<input name="name" required maxlength="80" placeholder="Например: вечер кино"></label>
+      <label>Цена в золоте<input name="cost" type="number" required min="1" value="40"></label>
+      <button class="primary-button" type="submit">Выставить в лавке</button>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>
