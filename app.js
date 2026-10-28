@@ -55,6 +55,11 @@ function render(){if(!appState.data)return;setHeader();({today:renderToday,quest
 async function refresh(){if(appState.busy)return;appState.busy=true;try{if(!isConfigured()){appState.demo=true;appState.data=appState.data||demoState();}else{appState.demo=false;await api('snapshot');}render();if(appState.demo)notify('Режим предпросмотра · данные пока не сохраняются');}catch(error){showError(error.message);notify(error.message);}finally{appState.busy=false;}}
 
 function openDialog(id){$(id).showModal();}
+$$('.modal').forEach(dialog=>{
+  dialog.querySelector('.close')?.addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('close',()=>dialog.querySelector('form')?.reset());
+  dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+});
 function todayAt12Plus(days){const d=new Date(localDate+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10);}
 async function doAction(action,id){try{const fields={};if(id!==undefined)fields.id=id;if(action==='quest_move')fields.due=todayAt12Plus(1);await api(action,fields);render();if(action==='quest_done')notify('Победа записана в хронику. Награда начислена.');else if(action==='goal_step')notify('Шаг кампании сохранён.');else notify('Изменения сохранены в общей хронике.');}catch(error){notify(error.message);}}
 
