@@ -63,7 +63,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .text-button[hidden] { display:none; }
 .content { display:flex; flex-direction:column; gap:10px; min-height:60vh; }
 .welcome-banner { position:relative; height:185px; overflow:hidden; isolation:isolate; border:1px solid #79b8e84d; border-radius:20px; background:#17334a; box-shadow:0 12px 30px #0005; }
-.welcome-banner>img { position:absolute; z-index:-2; width:100%; height:100%; inset:0; object-fit:cover; object-position:center 48%; }
+.welcome-banner>img { position:absolute; z-index:-2; top:0; right:-3%; bottom:auto; left:auto; width:auto; height:155%; max-width:none; object-fit:contain; object-position:top center; filter:drop-shadow(0 5px 14px #020b1280); }
 .banner-shade { position:absolute; z-index:-1; inset:0; background:linear-gradient(90deg,#102335e8 0%,#102335aa 42%,transparent 100%),linear-gradient(0deg,#102335a8,transparent 72%); }
 .banner-copy { position:absolute; left:17px; bottom:16px; max-width:74%; }
 .banner-copy h2 { margin:4px 0 3px; color:#fff9ea; font:700 27px/.96 var(--serif); text-shadow:0 2px 10px #06121a; }
